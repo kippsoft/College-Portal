@@ -1,0 +1,305 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>College Portal</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/adminlte/plugins/fontawesome-free/css/all.min.css" />
+
+    <!-- AdminLTE -->
+    <link rel="stylesheet" href="~/adminlte/dist/css/adminlte.min.css" />
+</head>
+
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+
+        <!-- ================= NAVBAR ================= -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#">
+                        <i class="fas fa-bars"></i>
+                    </a>
+                </li>
+
+                @if (User.Identity != null && User.Identity.IsAuthenticated)
+                {
+                    <li class="nav-item">
+                        <span class="nav-link text-dark">
+                            Hello @User.Identity.Name
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <form method="post" asp-area="Identity" asp-page="/Account/Logout">
+                            <button type="submit" class="nav-link btn btn-link text-dark">
+                                Logout
+                            </button>
+                        </form>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a class="nav-link text-dark"
+                           asp-area="Identity"
+                           asp-page="/Account/Login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark"
+                           asp-area="Identity"
+                           asp-page="/Account/Register">Register</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+
+        <!-- ================= SIDEBAR ================= -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <a href="#" class="brand-link text-center">
+                <span class="brand-text font-weight-light">
+                    College Portal
+                </span>
+            </a>
+
+            <div class="sidebar">
+                <nav>
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
+
+                        <!-- ================= ADMIN ================= -->
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a href="/Admin" class="nav-link">
+                                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                                    <p>Admin Dashboard</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-users"></i>
+                                    <p>
+                                        User Management
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="/Admin/Users" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Manage Users</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+
+                        <!-- ================= HOD ================= -->
+                        @if (User.IsInRole("HOD") || User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a href="/HOD" class="nav-link">
+                                    <i class="nav-icon fas fa-user-tie"></i>
+                                    <p>HOD Dashboard</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-building"></i>
+                                    <p>
+                                        Department Management
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="/HOD/Departments" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Departments</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/HOD/Courses" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Courses</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/HOD/Units" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Units</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+
+                        <!-- ================= FINANCE ================= -->
+                        @if (User.IsInRole("Finance") || User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a href="/Finance" class="nav-link">
+                                    <i class="nav-icon fas fa-money-check-alt"></i>
+                                    <p>Finance Dashboard</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-coins"></i>
+                                    <p>
+                                        Finance Operations
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="/Finance/ExamApprovals" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Approve Exam Requests</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+
+                        <!-- ================= EXAMINATION OFFICER ================= -->
+                        @if (User.IsInRole("ExaminationOfficer") || User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a href="/ExaminationOfficer" class="nav-link">
+                                    <i class="nav-icon fas fa-clipboard-check"></i>
+                                    <p>Exams Dashboard</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-gavel"></i>
+                                    <p>
+                                        Exam Processing
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="/ExaminationOfficer/FinalizeRequests" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Finalize Exam Requests</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+
+                        <!-- ================= TRAINER ================= -->
+                        @if (User.IsInRole("Trainer") || User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a href="/Trainer" class="nav-link">
+                                    <i class="nav-icon fas fa-chalkboard-teacher"></i>
+                                    <p>Trainer Dashboard</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-book-reader"></i>
+                                    <p>
+                                        Trainer Academics
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="/Trainer/MyUnits" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>My Allocated Units</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/Trainer/UploadMarks" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Upload Marks</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+
+                        <!-- ================= TRAINEE ================= -->
+                        @if (User.IsInRole("Trainee") || User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a href="/Trainee" class="nav-link">
+                                    <i class="nav-icon fas fa-user-graduate"></i>
+                                    <p>Trainee Dashboard</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-book"></i>
+                                    <p>
+                                        My Academics
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="/Trainee/MyUnits" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>My Units</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/Trainee/Results" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Assessment Results</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/Trainee/FeesStructure" class="nav-link">
+                                    <i class="nav-icon fas fa-money-bill"></i>
+                                    <p>Fees Structure</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/Trainee/FeesStatement" class="nav-link">
+                                    <i class="nav-icon fas fa-money-bill"></i>
+                                    <p>Fees Statement</p>
+                                </a>
+                            </li>
+                        }
+
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- ================= CONTENT ================= -->
+        <div class="content-wrapper">
+            <section class="content p-3">
+                @RenderBody()
+            </section>
+        </div>
+
+    </div>
+
+    <!-- jQuery -->
+    <script src="~/adminlte/plugins/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap -->
+    <script src="~/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- AdminLTE -->
+    <script src="~/adminlte/dist/js/adminlte.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

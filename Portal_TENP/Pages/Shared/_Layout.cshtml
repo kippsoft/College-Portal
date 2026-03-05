@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Portal_TENP</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Portal_TENP.styles.css" asp-append-version="true" />
+       <link rel="stylesheet" href="~/AdminLTE/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="~/AdminLTE/dist/css/adminlte.min.css">
+</head>
+<body class="hold-transition sidebar-mini">
+
+    <div class="wrapper">
+
+        <!-- Navbar -->
+        <partial name="_Navbar" />
+
+        <!-- Sidebar -->
+        <partial name="_Sidebar" />
+
+        <!-- Content Wrapper -->
+        <div class="content-wrapper">
+
+            <section class="content pt-3">
+                @RenderBody()
+            </section>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
+<script src="~/AdminLTE/plugins/jquery/jquery.min.js"></script>
+<script src="~/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="~/AdminLTE/dist/js/adminlte.min.js"></script>

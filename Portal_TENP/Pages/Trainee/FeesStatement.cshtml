@@ -1,0 +1,33 @@
+﻿@page
+@model Portal_TENP.Pages.Trainee.FeesStatementModel
+@{
+    ViewData["Title"] = "Fees Statement";
+}
+
+<h3>Fees Statement</h3>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Debit</th>
+            <th>Credit</th>
+            <th>Balance</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model.Statement)
+        {
+            <tr>
+                <td>@item.Date</td>
+                <td>@item.Description</td>
+                <td>@item.Debit</td>
+                <td>@item.Credit</td>
+                <td>@item.Balance</td>
+            </tr>
+        }
+
+    </tbody>
+</table>

@@ -2140,3 +2140,4 @@ wwwroot\adminlte\plugins\uplot\uPlot.iife.min.js
 wwwroot\adminlte\plugins\uplot\uPlot.min.css
 wwwroot\adminlte\README.md
 wwwroot\adminlte\starter.html
+wwwroot\images\logo.png

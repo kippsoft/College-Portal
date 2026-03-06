@@ -7,6 +7,7 @@ namespace Portal_TENP.Pages.Trainee
     public class FeesStatementModel : PageModel
     {
         private readonly IConfiguration _config;
+        public decimal FinalBalance = 0;
 
         public FeesStatementModel(IConfiguration config)
         {
@@ -20,16 +21,13 @@ namespace Portal_TENP.Pages.Trainee
             string admissionNo = HttpContext.Session.GetString("AdmissionNo");
 
             string connString = _config.GetConnectionString("SIMSDB");
+           
 
             using (SqlConnection con = new SqlConnection(connString))
             {
                 con.Open();
 
-                string query = @"SELECT *,
-       SUM(ISNULL(CAST(Debit AS DECIMAL(18,2)),0) 
-           - ISNULL(CAST(Credit AS DECIMAL(18,2)),0))
-       OVER (ORDER BY MyDate, ReferenceNo) AS RunningBalance
-FROM
+                string query = @"SELECT * FROM
 (
     SELECT DISTINCT dbo.Courses.ID,t.RegNo,t.Amount,t.Debit,t.Credit,CONVERT(VARCHAR,t.dated,103) AS Dated,t.dated as MyDate,t.Fees_Type,t.MyMode,t.ReferenceNo,t.SemesterCode,t.TDescription,CAST(t.TransactionCode AS varchar) AS TransactionCode,t.auditId,CONVERT(VARCHAR,t.audittime,100) AS audittime,t.ReferenceNo as Trans_code,t.TDescription AS Description,t.dated AS date_trans, [Students].[Status_Type] AS Status_ID, dbo.Students.[Name],CASE WHEN Students.Status_Type=0 THEN 'INACTIVE' ELSE 'ACTIVE' END AS stud_status,[dbo].[Students].Stud_Category,dbo.Billing_Codes.Name AS Course, dbo.faculty.faculty_name as faculty, dbo.faculty.faculty_id, dbo.Students_Master.Course_Group,dbo.Students.Gender, dbo.Students_Master.Student_Type_ID, dbo.Student_Category_Types.Name AS CategoryName, Billing_Codes.BeginDate,Billing_Codes.Code, Billing_Codes.EndDate,[Fees_Balance_Detail].[Bal] AS StudentFeesBalance, 1 AS Year_Paid FROM (SELECT DISTINCT CAST(rcptno AS varchar) AS ReferenceNo,abs(sum1) as Amount,'' AS Debit,abs(sum1) as Credit,dte as dated,Descr as TDescription,SemesterID as SemesterCode,admno as RegNo,'PAYMENT' as Fees_Type,Payment_by AS MyMode,Chno AS TransactionCode,auditId,audittime FROM feespay 
 UNION SELECT DISTINCT cast(InvoiceID AS varchar) AS ReferenceNo,abs(Amounts) as Amount,abs(Amounts) as Debit, '' AS Credit,Dated as dated,InvoiceDescr as TDescription,SemesterID as SemesterCode,Regno as RegNo,'INVOICE' as Fees_Type,'Invoice' AS MyMode,CAST(invoiceid AS varchar) AS TransactionCode,auditId,audittime FROM Student_invoices WHERE Amounts>=0 
@@ -55,18 +53,32 @@ ORDER BY MyDate ASC, ReferenceNo ASC";
                 cmd.Parameters.AddWithValue("@AdmissionNo", admissionNo);
 
                 SqlDataReader dr = cmd.ExecuteReader();
-
+                decimal runningBalance = 0;
                 while (dr.Read())
                 {
+                    decimal debit = 0;
+                    decimal credit = 0;
+
+                    decimal.TryParse(dr["Debit"]?.ToString(), out debit);
+                    decimal.TryParse(dr["Credit"]?.ToString(), out credit);
+
+                    runningBalance += debit - credit;
+
                     Statement.Add(new StatementItem
                     {
                         Date = dr["MyDate"].ToString(),
                         Description = dr["TDescription"].ToString(),
                         Debit = dr["Debit"].ToString(),
                         Credit = dr["Credit"].ToString(),
-                        Balance = dr["RunningBalance"].ToString()
+                        Balance = runningBalance.ToString(),
+                        StudentName = dr["Name"].ToString(),
+                        AdmissionNo = dr["RegNo"].ToString(),
+                        CourseName = dr["Course"].ToString(),
+                        DepartmentName= dr["faculty"].ToString()
                     });
+                  
                 }
+                FinalBalance = runningBalance;
             }
         }
 
@@ -77,6 +89,12 @@ ORDER BY MyDate ASC, ReferenceNo ASC";
             public string Debit { get; set; }
             public string Credit { get; set; }
             public string Balance { get; set; }
+
+            public string StudentName { get; set; }
+            public string AdmissionNo { get; set; }
+            public string CourseName { get; set; }
+            public string DepartmentName { get; set; }
+
         }
     }
 }

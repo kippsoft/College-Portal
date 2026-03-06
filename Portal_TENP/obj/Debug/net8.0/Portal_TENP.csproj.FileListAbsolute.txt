@@ -78,3 +78,5 @@ C:\Users\kipps\source\repos\Portal_TENP\Portal_TENP\obj\Debug\net8.0\refint\Port
 C:\Users\kipps\source\repos\Portal_TENP\Portal_TENP\obj\Debug\net8.0\Portal_TENP.pdb
 C:\Users\kipps\source\repos\Portal_TENP\Portal_TENP\obj\Debug\net8.0\Portal_TENP.genruntimeconfig.cache
 C:\Users\kipps\source\repos\Portal_TENP\Portal_TENP\obj\Debug\net8.0\ref\Portal_TENP.dll
+C:\Users\kipps\source\repos\Portal_TENP\Portal_TENP\bin\Debug\net8.0\Rotativa.AspNetCore.dll
+C:\Users\kipps\source\repos\Portal_TENP\Portal_TENP\obj\Debug\net8.0\Portal_TENP.MvcApplicationPartsAssemblyInfo.cs

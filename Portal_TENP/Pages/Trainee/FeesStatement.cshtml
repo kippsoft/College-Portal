@@ -3,6 +3,32 @@
 @{
     ViewData["Title"] = "Fees Statement";
 }
+<div class="text-center mb-3">
+
+    <img src="~/images/logo.png" style="height:90px;" />
+
+    <h3><b>THE ELDORET NATIONAL POLYTECHNIC</b></h3>
+    <hr />
+
+</div>
+<div class="text-center">
+    <h4><b>@Model.Statement[0].DepartmentName</b></h4>
+    <hr />
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-6">
+        <strong>Student Name :</strong> @Model.Statement[0].StudentName
+    </div>
+
+    <div class="col-md-6">
+        <strong>Admission No :</strong> @Model.Statement[0].AdmissionNo
+    </div>
+
+    <div class="col-md-6">
+        <strong>Course :</strong> @Model.Statement[0].CourseName
+    </div>
+</div>
 
 <h3>Fees Statement</h3>
 
@@ -21,13 +47,39 @@
         @foreach (var item in Model.Statement)
         {
             <tr>
-                <td>@item.Date</td>
+                <td>@DateTime.Parse(item.Date).ToString("dd/MM/yyyy")</td>
                 <td>@item.Description</td>
-                <td>@item.Debit</td>
-                <td>@item.Credit</td>
-                <td>@item.Balance</td>
+                <td class="text-end">@decimal.Parse(item.Debit).ToString("N2")</td>
+                <td class="text-end">@decimal.Parse(item.Credit).ToString("N2")</td>
+                <td class="text-end">@decimal.Parse(item.Balance).ToString("N2")</td>
             </tr>
         }
 
+
     </tbody>
+    <tfoot>
+        <tr class="table-warning">
+            <td colspan="4"><b>FINAL BALANCE</b></td>
+            <td class="text-end"><b>@String.Format("{0:N2}",@Model.FinalBalance)</b></td>
+        </tr>
+    </tfoot>
 </table>
+
+<button class="btn btn-primary" onclick="window.print()">
+    Print Statement
+</button>
+<style>
+    @@media print {
+
+        .main-sidebar,
+        .main-header,
+        button {
+            display: none !important;
+        }
+
+        .content-wrapper {
+            margin-left: 0;
+        }
+
+    }
+</style>
